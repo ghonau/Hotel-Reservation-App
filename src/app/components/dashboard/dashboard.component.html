@@ -1,0 +1,109 @@
+<mat-grid-list rowHeight="100px" gutterSize="20px" [cols]="dashboardGridCols" class="dashboard-grid-list">
+    <!-- tile 1 starts  -->
+    <mat-grid-tile  matTooltip="Total Booking all time" matRipple fxLayout="row" fxLayoutAlign="center streched" class="dashboard-tile dashboard-tile-1 colorful-tile">
+        <div class="h-100" fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
+             <mat-icon>description</mat-icon>   
+        </div>
+        <div class="h-100 text-right" fxFlex="1 1 75%" fxLayout="column" fxLayoutAlign="center start">
+            <div class="dashboard-tile-heading">
+                Total Bookings
+            </div>
+            <div class="dashboard-tile-sub-heading">
+                {{ 8450 | number }}
+            </div>   
+        </div>       
+    </mat-grid-tile>
+    <!-- tile 1 ends -->
+<!-- tile 2 starts -->
+    <mat-grid-tile  matTooltip="Number of rooms available" matRipple fxLayout="row" fxLayoutAlign="center streched" class="dashboard-tile dashboard-tile-2 colorful-tile">
+        <div class="h-100" fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
+             <mat-icon>hotel</mat-icon>   
+        </div>
+        <div class="h-100 text-right" fxFlex="1 1 75%" fxLayout="column" fxLayoutAlign="center start">
+            <div class="dashboard-tile-heading">
+                Rooms Available
+            </div>
+            <div class="dashboard-tile-sub-heading">
+                {{ 220 | number }}
+            </div>   
+        </div>       
+    </mat-grid-tile>
+
+    <!-- tile 2 ends -->
+<!-- tile 3 starts -->
+    <mat-grid-tile  matTooltip="New customers in this year" matRipple fxLayout="row" fxLayoutAlign="center streched" class="dashboard-tile dashboard-tile-3 colorful-tile">
+        <div class="h-100" fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
+             <mat-icon>group</mat-icon>   
+        </div>
+        <div class="h-100 text-right" fxFlex="1 1 75%" fxLayout="column" fxLayoutAlign="center start">
+            <div class="dashboard-tile-heading">
+                New Customers
+            </div>
+            <div class="dashboard-tile-sub-heading">
+                {{ 1552 | number }}
+            </div>   
+        </div>       
+    </mat-grid-tile>
+
+    <!-- tile 3 ends -->
+
+    <!-- tile 4 starts -->
+    <mat-grid-tile  matTooltip="Total revenue all time" matRipple fxLayout="row" fxLayoutAlign="center streched" class="dashboard-tile dashboard-tile-4 colorful-tile">
+        <div class="h-100" fxFlex="1 1 25%" fxLayout="column" fxLayoutAlign="center center">
+             <mat-icon>attach_money</mat-icon>   
+        </div>
+        <div class="h-100 text-right" fxFlex="1 1 75%" fxLayout="column" fxLayoutAlign="center start">
+            <div class="dashboard-tile-heading">
+                Total Revenue
+            </div>
+            <div class="dashboard-tile-sub-heading">
+                {{ 15322 | currency }}K
+            </div>   
+        </div>       
+    </mat-grid-tile>
+
+    <!-- tile 4 ends -->
+
+    <!-- Tile 5 in second row starts -->
+    <mat-grid-tile [colspan]="cardColspan" rowspan="4" 
+    class="dashboard-tile dashboard-tile-5 scroll">
+        <div   fxFlex="1 1 100%"  fxLayout="column">
+            <!-- first box of the second row  starts-->
+            <div fxFlex="1 1 100%" fxLayout="row" fxLayoutAlign="start stretch">
+                <div fxFlex="1 1 50%" class="p-10 font-weight-bold text-large">Upcoming Bookings</div>
+                <div fxFlex="1 1 50%" class="text-right p-10">
+                  <mat-icon matRipple class="hand-icon">more_vert</mat-icon>
+                </div>
+              </div>
+            <!-- first box of the second row ends -->
+            <div fxFlex="1 1 100%" class="p-5">
+               <mat-accordion>
+                   <mat-expansion-panel *ngFor="let booking of bookings">
+                    <mat-expansion-panel-header>
+
+                      
+                        
+                        <div class="w-100" fxLayout="row" fxLayoutAlign="space-between start" fxLayout.lt-md="column">
+                            <mat-panel-title>
+                                {{booking.guest1Name}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                some description text goes here
+                            </mat-panel-description>
+                       </div>  
+                    </mat-expansion-panel-header>  
+                                        
+                     
+                    
+                    
+                       some panel content
+                   </mat-expansion-panel>
+               </mat-accordion>
+            </div>
+        </div>
+        
+    </mat-grid-tile>
+    <!-- Tile 5 in second row ends -->
+    <mat-grid-tile style="background-color:#2f6597; color: #ffffff" [colspan]="cardColspan" rowspan="4">six</mat-grid-tile>
+    
+</mat-grid-list>
