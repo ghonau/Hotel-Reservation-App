@@ -49,10 +49,10 @@ body {
   /* background-color:#f5f5f5; */
   background-color: #edf0f8;
   padding: 12px;
-  min-height: 85vh !important;
+  min-height: 82vh !important;
   min-width: 360px;
-  /* max-height: 90vh !important;
-  overflow: scroll-y; */
+  max-height: 90vh !important;
+  overflow: scroll-y; 
 }
 
 .drawer-container {
