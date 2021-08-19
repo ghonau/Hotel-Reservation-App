@@ -14,6 +14,7 @@ import { BookingComponent } from './components/booking/booking.component';
 
 import { BookingListComponent } from './components/booking-list/booking-list.component';
 import { charts } from 'highcharts';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { charts } from 'highcharts';
     ReactiveFormsModule,
     HttpClientModule,
     FlexLayoutModule,
-    ChartModule
+    ChartModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

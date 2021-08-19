@@ -1,1 +1,105 @@
-<p>booking works!</p>
+<div class="page-title" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center start" fxLayoutGap.lt-md="13px" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>New Booking</div>    
+    <div>
+        <a mat-stroked-button [routerLink]="['/booking-list']">
+                <mat-icon>arrow_back</mat-icon>&nbsp;Back to Booking
+        </a>
+    </div>
+</div>
+
+<mat-horizontal-stepper>
+    <mat-step label="Search for a hotel" stepControlName="searchHotel">
+            <form [formGroup] = "formGroup" >                
+                <div formGroupName="searchHotel" class="form-container mb mt">
+
+                    <div  
+                    fxLayout="row" fxLayoutAlign="space-between center"
+                    fxLayout.lt-md="column" 
+                    fxLayoutAlign.lt-md="center start">
+
+                        <div  fxFlex.lt-md="1 1 100%"  >
+                            <h2 class="section-heading">Search for a hotel</h2>  
+                        </div>
+
+                        <div  fxFlex.lt-md="1 1 100%">
+                            <button mat-flat-button color="primary">
+                                <span>Search Hotel</span><mat-icon>chevron_right</mat-icon> </button>   
+                        </div>                      
+                    </div>
+
+                    <div fxLayout="row" fxLayoutGap="15px" fxLayout.lt-md="column">
+                        <div fxFlex="1 1 calc(50% - 20px)" fxFlex.lt-md="1 1 100%">
+                            <!-- city autocomplate -->
+                            <mat-form-field class="w-100" color="primary">
+                                <mat-label>Where</mat-label>
+                                <input type="text"  matInput formControlName="city" [matAutocomplete]= "citiesAutocomplate" />
+                                <mat-autocomplete #citiesAutocomplate = "matAutocomplete">
+                                    <mat-option *ngIf="isCitiesLoading">Loading...</mat-option>                                
+                                    <mat-option *ngFor="let city of cities" [value]="city.cityName">{{city.cityName}}</mat-option>
+                                </mat-autocomplete>
+
+                                <mat-error *ngIf="getFormControl('searchHotel.city').hasError('required')" [innerHTML]="getErrorMessage('city', 'required')"></mat-error>
+                                <mat-hint align="end">Choose or type a city</mat-hint>
+                                <mat-icon matPrefix class="mr">location_city</mat-icon>
+                            </mat-form-field>
+                            <!-- end of city autocomplete -->
+                            <div class="mt" fxLayout="row" fxLayout.lt-md="column" >
+                                    
+                                <div  fxFlex.lt-md="1 1 100%">
+                                    <mat-label>Adults:</mat-label>
+                                    <button mat-icon-button class="hand-icon" type="button" (click)="decreaseAdults()">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </button>
+                                    <span class="font-weight-bold">{{formGroup.value.searchHotel.adults }}</span>
+                                    <button mat-icon-button class="hand-icon" type="button" (click)="increaseAdults()">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </button>
+
+                                </div>
+                                <div class="ml" fxFlex.lt-md="1 1 100%">
+                                    <mat-label>Children:</mat-label>
+                                    <button mat-icon-button class="hand-icon" type="button" (click)="decreaseChildren()">
+                                        <mat-icon>remove_circle</mat-icon>
+                                    </button>
+                                    <span class="font-weight-bold">{{formGroup.value.searchHotel.children }}</span>
+                                    <button mat-icon-button class="hand-icon" type="button" (click)="increaseChildren()">
+                                        <mat-icon>add_circle</mat-icon>
+                                    </button>
+                                </div>                                                                        
+                            </div>
+                        </div>
+                        <!-- box 2 starts -->                        
+                        <div fxFlex="1 1 calc(50% - 20px)" fxFlex.lt-md="1 1 100%">
+                            <!-- date range input -->
+                            <mat-form-field class="w-100" color="primary">
+                                <mat-label>Check-in and Check-out dates</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeHolder="Check-in date" formControlName="checkIn"/>
+                                    <input matEndDate placeHolder="Check-out date"  formControlName="checkOut"/>
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>    
+                                <mat-icon matPrefix class="mr">pending_actions</mat-icon>
+                                <mat-error *ngIf="getFormControl('searchHotel.checkIn').hasError('required')" [innerHTML] ="getErrorMessage('checkIn','required')"></mat-error>
+                                <mat-error *ngIf="getFormControl('searchHotel.checkOut').hasError('required')" [innerHTML] ="getErrorMessage('checkOut','required')"></mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+            </div>
+                
+
+
+
+              
+            </form>
+
+    </mat-step>
+    <mat-step label="Choose a hotel"></mat-step>
+    <mat-step label="Choose a Room"></mat-step>
+    <mat-step label="Personal Information"></mat-step>
+    <mat-step label="Guests Information"></mat-step>
+    <mat-step label="Payment"></mat-step>
+    <mat-step label="Finish"></mat-step>
+</mat-horizontal-stepper>
+<div class="mb">{{formGroup.value | json }}
+</div>

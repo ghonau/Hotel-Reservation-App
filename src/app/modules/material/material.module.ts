@@ -12,6 +12,11 @@ import {MatSidenavModule} from '@angular/material/sidenav'
 import {MatListModule} from '@angular/material/list'
 import {MatRippleModule} from '@angular/material/core'
 import {MatGridListModule} from '@angular/material/grid-list'; 
+import {MatProgressBarModule} from '@angular/material/progress-bar'
+import {MatStepperModule} from '@angular/material/stepper'
+import {MatSelectModule} from '@angular/material/select'
+import {MatAutocompleteModule} from '@angular/material/autocomplete'
+import {MatDatepickerModule} from '@angular/material/datepicker'; 
 
 
 
@@ -27,7 +32,12 @@ const materialModules = [ MatButtonModule,
   MatSidenavModule,
   MatListModule,
   MatRippleModule,
-  MatGridListModule
+  MatGridListModule,
+  MatProgressBarModule,
+  MatStepperModule,
+  MatSelectModule,
+  MatAutocompleteModule,
+  MatDatepickerModule
 ]
 
 

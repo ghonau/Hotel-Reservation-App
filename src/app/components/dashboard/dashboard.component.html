@@ -75,6 +75,7 @@
                   <mat-icon matRipple class="hand-icon">more_vert</mat-icon>
                 </div>
               </div>
+              <mat-progress-bar *ngIf="bookingLoadingStarted" mode="indeterminate"></mat-progress-bar>
             <!-- first box of the second row ends -->
             <div fxFlex="1 1 100%" class="p-5">
                <mat-accordion>
