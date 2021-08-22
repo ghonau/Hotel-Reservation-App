@@ -17,6 +17,10 @@ import {MatStepperModule} from '@angular/material/stepper'
 import {MatSelectModule} from '@angular/material/select'
 import {MatAutocompleteModule} from '@angular/material/autocomplete'
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
+import {MatCardModule} from '@angular/material/card'
+import {MatButtonToggleModule} from '@angular/material/button-toggle'; 
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -37,7 +41,11 @@ const materialModules = [ MatButtonModule,
   MatStepperModule,
   MatSelectModule,
   MatAutocompleteModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatCardModule,
+  MatButtonToggleModule,
+  MatCheckboxModule,
+  MatChipsModule
 ]
 
 
