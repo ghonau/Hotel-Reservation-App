@@ -34,9 +34,14 @@ export class BookingService {
 
 
   }
+  postBooking(booking) : Observable<Booking>{
+    return this.httpClient.post<Booking>(`http://localhost:3000/bookings`, booking); 
+  }
+
 }
 
 
 // booking.checkIn = new Date(booking.checkIn);
 // booking.checkOut = new Date(booking.checkOut);
 // booking.dateOfBirth = new Date(booking.dateOfBirth);
+

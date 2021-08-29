@@ -1,1 +1,74 @@
-<p>booking-list works!</p>
+<div class="page-title" fxLayoutGap="10px" 
+fxLayout="row" fxLayoutAlign="space-between stretch"
+fxLayout-lt-md="column">
+    <div>Booking</div>
+    <div [ngClass.gt-xs]="{'text-right': true}">
+        <a mat-flat-button class="button-blue" [routerLink] = "['/booking']">
+            <mat-icon>add_circle</mat-icon>&nbsp; New Booking
+        </a>
+    </div>
+</div>
+
+<form [formGroup]="formGroup">
+    <mat-form-field appearance="fill" class="w-100" floatLabel="never">
+        <mat-label>Search</mat-label>
+        <input type="search" matInput formControlName="search" (keyup)="filterBookings()">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-icon matSuffix class="hand=icon" (click)="clearFilter()">close</mat-icon>
+    </mat-form-field>
+</form>
+<div class="table-container">
+    <table mat-table class="w-100" [dataSource]="bookings">
+        <ng-container matColumnDef="customerName">
+           <th mat-header-cell  *matHeaderCellDef>Customer Name</th>
+            <td mat-cell *matCellDef ="let booking" class="w-15">{{booking.customerName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="checkIn">
+            <th mat-header-cell  *matHeaderCellDef>
+                <div fxLayout="row" fxLayout="start center">
+                    <div>
+                        Check In   
+                    </div>
+                    <mat-icon>arrow_right_alt</mat-icon>
+                    <div>Check Out</div>
+                </div>                
+            </th>
+            <td mat-cell *matCellDef ="let booking" class="w-30">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div>
+                        {{booking.checkIn | date : 'yyyy/MM/dd h:mm:ss a'}}
+                    </div>
+                    <mat-icon>arrow_right_alt</mat-icon>
+                    <div>
+                        {{booking.checkOut | date : 'yyyy//MM/dd h:mm:ss a'}}
+                    </div>             
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell  *matHeaderCellDef>Payment Status</th>
+            <td mat-cell *matCellDef ="let booking" class="w-10">{{booking.status}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="roomType">
+            <th mat-header-cell  *matHeaderCellDef>Room Type</th>
+            <td mat-cell *matCellDef ="let booking" class="w-20">{{booking.roomType}}</td>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+            <th mat-header-cell  *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef ="let booking" class="w-30">{{booking.phone}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let booking" class="w-30"></td>
+        </ng-container>
+
+        <!-- Header row starts -->
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true" [ngClass]="{'hidden':!isLoadingCompleted}"></tr>
+        <tr mat-row *matRowDef="let booking; columns:columnsToDisplay"></tr>
+        
+    </table>
+</div>

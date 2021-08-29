@@ -13,18 +13,24 @@ import {map} from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Country } from 'src/app/models/country';
+import { CountryService } from 'src/app/services/country.service';
+import { BookingService } from 'src/app/services/booking.service';
+import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
+import { MatHorizontalStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
-export class BookingComponent implements OnInit, AfterViewInit{
+export class BookingComponent implements OnInit {
   
   //properties
   formGroup : FormGroup  ;
   cities: City[] = []; 
   hotels: Hotel[] = []; 
+  countries : Country[] = []; 
   roomTypes:RoomType[] = [];
   isCitiesLoading : boolean = false;
   minAdults: number = 1; 
@@ -56,14 +62,25 @@ export class BookingComponent implements OnInit, AfterViewInit{
   
 
   @ViewChild("foodInput") foodInput : ElementRef<HTMLInputElement>;
+  @ViewChild("stepper") stepper : MatHorizontalStepper 
 
-  separatedKeyCodes: number[] = [ENTER, COMMA];
+  separatorKeyCodes: number[] = [ENTER, COMMA];
+
+  minDate : Date = new Date('1950-01-01');
+  maxDate : Date = new Date('2010-01-01'); 
+  startDate : Date = new Date('2002-01-01');
 
 
 
   
   
-  constructor(private cityService: CityService, private hotelService:HotelService, private roomTypeService: RoomTypeService) { 
+  constructor(private cityService: CityService,
+     private hotelService:HotelService,
+     private roomTypeService: RoomTypeService,
+     private countryService : CountryService,
+     private bookingService: BookingService
+     )
+      { 
 
     //formGroup
     this.formGroup = new FormGroup({
@@ -81,8 +98,29 @@ export class BookingComponent implements OnInit, AfterViewInit{
         roomType : new FormControl("Standard Single Room", [Validators.required]),
         allDineIn:new FormControl(false),
         dineIn:new FormArray([]),
-        foods: new FormControl(null)
+        foods: new FormControl(null),
+        extraBed: new FormControl(false)
 
+      }),
+      personalInformation: new FormGroup({
+        customerName: new FormControl(null, [Validators.required, Validators.maxLength(30), Validators.pattern('^[A-Za-z.]*$')]),
+        country:new FormControl(null , [Validators.required]),
+        phone: new FormControl(null), 
+        dateOfBirth: new FormControl(null),
+        gender: new FormControl(null)
+      }),
+      guestsInformation: new FormGroup({
+        guest1Name: new FormControl(null),
+        guest1Age: new FormControl(null),
+        guest1Gender: new FormControl(null), 
+        guest2Name: new FormControl(null),
+        guest2Age: new FormControl(null),
+        guest2Gender: new FormControl(null)
+      }),
+      payment: new FormGroup({
+        creditCardNumber: new FormControl(null),
+        cvv: new FormControl(null),
+        giftCardNumber: new FormControl(null)
       })
     })
 
@@ -109,9 +147,7 @@ export class BookingComponent implements OnInit, AfterViewInit{
     )
 
   }
-  ngAfterViewInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  
 
 
 
@@ -157,6 +193,17 @@ export class BookingComponent implements OnInit, AfterViewInit{
       }
     )
 
+    this.countryService.getCountries().subscribe(
+      (response: Country[]) => {        
+        
+        this.countries = response          
+
+      },
+      (error) => {
+        console.log(error); 
+      }
+      )
+
  
 
     this.roomTypeService.getRoomTypes().subscribe(
@@ -167,6 +214,12 @@ export class BookingComponent implements OnInit, AfterViewInit{
         console.log(error); 
       }
     )
+
+    //reset stepper
+    setTimeout(() => {
+      this.stepper.reset() ;
+    }, 200); 
+    
   }
   
 
@@ -239,6 +292,8 @@ export class BookingComponent implements OnInit, AfterViewInit{
   }
 
   selected(event: MatAutocompleteSelectedEvent): void{
+    console.log('selected triggered');
+    console.log(event.option.viewValue); 
     this.foods.push({name: event.option.viewValue});
     this.getFormControl("chooseRoom").patchValue({foods:null});
     this.foodInput.nativeElement.value =''; 
@@ -260,6 +315,15 @@ export class BookingComponent implements OnInit, AfterViewInit{
       case 'checkOut':{
         if(errorType == 'required') errorMessage = "You must choose a <strong>Check-Out Date</strong>"
         break; 
+      }
+      case 'customerName':{
+        if(errorType == 'required') errorMessage = "You must specify a <strong> Name </strong>"
+        else if(errorType == 'maxlength') errorMessage = '<strong> Name </strong> can contain up to 30 characters only'; 
+        else if(errorType == 'pattern') errorMessage = '<strong> Name </strong> can contain alphabet characters and dot(.) or space only only'          
+        
+      }
+      case 'country':{
+        if(errorType == 'required') errorMessage ="You must specify a <strong> country </strong>"
       }
 
       
@@ -307,6 +371,37 @@ export class BookingComponent implements OnInit, AfterViewInit{
       this.getFormControl("chooseRoom").patchValue({allDineIn:false}); 
     }   
   }
+  
+
+  onFinishClick(){
+
+    console.log(this.formGroup.value); 
+    let booking = {...this.formGroup.value.searchHotel,
+    ...this.formGroup.value.chooseHotel,
+    ...this.formGroup.value.chooseRoom,
+    ...this.formGroup.value.personalInformation, 
+    ...this.formGroup.value.guestInformation,
+    ...this.formGroup.value.payment,
+    foods: this.foods,
+    status : 'Not Paid'       
+    }
+
+    this.bookingService.postBooking(booking).subscribe(
+      (response) => {
+
+        console.log(response ); 
+
+      },
+      (error) => {
+        
+        console.log(error); 
+
+      }
+    ) 
+
+
+  }
+
 
 
 

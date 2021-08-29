@@ -7,9 +7,9 @@
     </div>
 </div>
 
-<mat-horizontal-stepper>
+<mat-horizontal-stepper linear="true" #stepper>
     <!-- Search for hotel -->
-    <mat-step label="Search for a hotel" stepControlName="searchHotel">
+    <mat-step label="Search for a hotel"  stepControlName="searchHotel" [completed]="formGroup.get('searchHotel').valid">
             <form [formGroup] = "formGroup" >                
                 <div formGroupName="searchHotel" class="form-container mb mt">
 
@@ -96,7 +96,7 @@
 
     </mat-step>
     <!-- Choose a hotel start -->
-    <mat-step label="Choose a hotel">
+    <mat-step label="Choose a hotel" stepControlName="chooseHotel" [completed]="formGroup.get('chooseHotel').valid">
         <div  
         fxLayout="row" fxLayoutAlign="space-between center"
         fxLayout.lt-md="column" 
@@ -136,10 +136,10 @@
 
     </mat-step>
     <!-- Choose a room starts -->
-    <mat-step label="Choose a Room">
+    <mat-step label="Choose a Room" stepControlName="chooseRoom" [completed]="formGroup.get('chooseRoom').valid">
         <form [formGroup] = "formGroup">
             <div formGroupName="chooseRoom" class="form-container mt mb">
-                 <h2 class="section-header" fxLayout="row" fxLayoutAlign="space-between streched" FxLayout.lt-md="column">
+                 <h2 class="section-header" fxLayout="row" fxLayoutAlign="space-between stretch" FxLayout.lt-md="column">
                         <div fxFlex="1 1 40%" fxFlex.lt-md="1 1 100%">
                             Room Tarrif
                         </div>
@@ -200,6 +200,9 @@
 
                     </div>
                      <div fxFlex="1 1 30%" fxFlex.lt-md="1 1 100%">
+                            <div class="mt mb">
+                                <mat-slide-toggle formControlName="extraBed">Extra bed</mat-slide-toggle>
+                            </div>
                              <div class="mt mb">
                                  <mat-label class="mr">Dine In:</mat-label>
                                  <span class="mr">
@@ -220,17 +223,17 @@
                              <mat-form-field class="mt w-100">
                                 <mat-label>Food Menu</mat-label>
                                 <mat-chip-list #chipList>
-                                    <mat-chip *ngFor="let food of foods" [removable]="true" (removed)="remove(food)">
+                                    <mat-chip *ngFor="let food of foods" removable="true" (removed)="remove(food)">
                                         {{food.name}}
                                         <mat-icon matChipRemove>cancel</mat-icon>
                                     </mat-chip>
                                 </mat-chip-list>
                                 <input placeholder="Type food name..." [matChipInputFor]="chipList"
                                 (matChipInputTokenEnd)="add($event)"
-                                [matChipInputSeparatorKeyCodes]="separatedKeyCodes"
+                                [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
                                 [matAutocomplete]="foodsAutocomplete" formControlName="foods" #foodInput>
                              </mat-form-field>
-                             <mat-autocomplete #foodsAutocomplete="matAutocomplete">
+                             <mat-autocomplete #foodsAutocomplete="matAutocomplete" (optionSelected)="selected($event)">
                                  <mat-option *ngFor="let food of filteredFoods | async" [value]="food.name">{{food.name}}</mat-option>
                              </mat-autocomplete>
                     </div>
@@ -240,10 +243,197 @@
 
     </mat-step>
 
-    <mat-step label="Personal Information"></mat-step>
-    <mat-step label="Guests Information"></mat-step>
-    <mat-step label="Payment"></mat-step>
-    <mat-step label="Finish"></mat-step>
+        <!-- Personal information  -->
+    <mat-step label="Personal Information" stepControlName="personalInformation" [completed]="formGroup.get('personalInformation').valid">
+        <form [formGroup] = "formGroup">
+            <div class="form-container mt mb" fxFlex="1 1 100%" formGroupName="personalInformation">
+                <h2 class="section-header" fxLayout="row" fxLayoutAlign="space-between strech" fxLayout.lt-md="column" >
+                    <div fxFlex="1 1 40%" fxFlex.lt-md="1 1 100%">Personal Information</div>
+                    <div fxFlex="1 1 60%" fxFlex.lt-md="1 1 100%" [ngClass.gt-xs]="{'text-right':true}">
+                        <button mat-stroked-button color="accent" matStepperPrevious class="mr">
+                            <mat-icon>chevron_left</mat-icon>&nbsp;Back...</button>
+                        <button mat-stroked-button color="primary" matStepperNext><mat-icon>chevron_right</mat-icon>&nbsp;Save & Next</button>
+                    </div>
+                </h2>
+                <!-- customer name starts -->
+                    <mat-form-field class="w-100" color="primary">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput formControlName="customerName">
+                        <mat-hint align="end">Up to 30 characters</mat-hint>
+                        <mat-error *ngIf="getFormControl('personalInformation.customerName').hasError('required')" [innerHTML]="getErrorMessage('customerName', 'required')"></mat-error>
+                        <mat-error *ngIf="getFormControl('personalInformation.customerName').hasError('maxlength')" [innerHTML]="getErrorMessage('customerName', 'maxlength')"></mat-error>
+                        <mat-error *ngIf="getFormControl('personalInformation.customerName').hasError('pattern')" [innerHTML]="getErrorMessage('customerName', 'pattern')"></mat-error>
+                        <mat-icon matPrefix class="mr">account_circle</mat-icon>
+                    </mat-form-field>
+                <!-- customer name ends -->
+                <!-- phone starts -->
+                    <mat-form-field class="w-100" color="primary">
+                        <mat-label>Phone</mat-label>
+                        <input type="text" matInput formControlName="phone">
+                        <mat-icon matPrefix class="mr">phone</mat-icon>                        
+                    </mat-form-field>
+                <!-- phone ends -->
+                <!-- country starts -->
+                    <mat-form-field class="w-100" color="primary">
+                        <mat-label>Country</mat-label>
+                        <mat-select formControlName="country">
+                            <mat-option *ngFor="let country of countries" [value]="country.countryName">{{country.countryName}}</mat-option>
+                            <mat-hint align="end">choose a country</mat-hint>
+                            <mat-error *ngIf="getFormControl('personalInformation.country').hasError('required')" [innerHTML]="getErrorMessage('country', 'required')"></mat-error>
+                            
+                        </mat-select>
+                        <mat-icon matPrefix class="mr">place</mat-icon>
+                    </mat-form-field>
+                <!-- country ends  -->
+                <!-- date of birth -->
+                <mat-form-field class="w-100" color="primary">
+                    <mat-label>Date of birth:</mat-label>
+                    <input type="text" matInput formContorlName="dateOfBirth" [matDatepicker] = "dobDatepicker" [min]="minDate" [max]="maxDate">
+                    <mat-datepicker-toggle [for]="dobDatepicker" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #dobDatepicker startView="month" [startAt]="startDate"></mat-datepicker>
+                    <mat-hint align="end">Choose date of birth</mat-hint>
+                    <mat-icon matPrefix class="mr">calendar_today</mat-icon>                    
+                </mat-form-field>
+                <!-- date of birth ends -->
+                <!-- gender starts -->
+                    <div class="mt mb">
+                        <mat-label class="mr">Gender:</mat-label>
+                        <mat-radio-group formControlName="gender">
+                            <mat-radio-button value="male" class="mr">Male</mat-radio-button>
+                            <mat-radio-button value="female" class="mr ml">Female</mat-radio-button>
+                            <mat-radio-button value="others">Others</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                <!-- gender ends -->
+                    
+            </div>
+        </form>
+    </mat-step>
+    <!-- guest information starts -->
+    <mat-step label="Guests Information" stepControlName="guestsInformation" [completed]="formGroup.get('guestsInformation').valid">
+        <form [formGroup] = "formGroup">
+            <div class="form-container" fxFlex="1 1 100%" formGroupName="guestsInformation">
+      
+
+                <h2 class="section-header" fxLayout="row" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" >
+                    <div fxFlex="1 1 40%" fxFlex.ld-md="1 1 100%">Guest Information</div>
+                    <div fxFlex="1 1 60%" fxFlex.ld-md="1 1 100%" [ngClass.gt-xs]="{'text-right': true}">
+                        <button mat-stroked-button color="accent" matStepperPrevious class="mr">
+                            <mat-icon>chevron_left</mat-icon>&nbsp;<span>Back...</span>
+                        </button>
+                        <button mat-stroked-button color="primary" >
+                            <mat-icon>chevron_right</mat-icon><span>Save & Next</span>
+                        </button>
+                    </div>
+                </h2>
+                <!-- guest 1 starts -->
+        <div class="guest-1">
+            <div class="font-weight-bold text-blue">Guest 1</div>
+  
+            <mat-form-field class="w-100" color="primary">
+              <mat-label>Guest Name</mat-label>
+              <input type="text" matInput formControlName="guest1Name">
+              <mat-icon matPrefix class="mr">people_alt</mat-icon>
+            </mat-form-field>
+  
+            <div fxLayout="row">
+              <mat-form-field fxFlex="1 1 50%" color="primary">
+                <mat-label>Age</mat-label>
+                <input type="number" matInput formControlName="guest1Age">
+                <mat-icon matPrefix class="mr">event</mat-icon>
+              </mat-form-field>
+  
+              <div class="pt">
+                <mat-radio-group formControlName="guest1Gender">
+                  <mat-radio-button value="male" class="ml mr">Male</mat-radio-button>
+                  <mat-radio-button value="female" class="ml mr">Female</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+          <!-- guest 1 ends -->
+  
+  
+  
+          <!-- guest 2 starts -->
+          <div class="guest-2">
+            <div class="font-weight-bold text-blue">Guest 2</div>
+  
+            <mat-form-field class="w-100" color="primary">
+              <mat-label>Guest Name</mat-label>
+              <input type="text" matInput formControlName="guest2Name">
+              <mat-icon matPrefix class="mr">people_alt</mat-icon>
+            </mat-form-field>
+  
+            <div fxLayout="row">
+              <mat-form-field fxFlex="1 1 50%" color="primary">
+                <mat-label>Age</mat-label>
+                <input type="number" matInput formControlName="guest2Age">
+                <mat-icon matPrefix class="mr">event</mat-icon>
+              </mat-form-field>
+  
+              <div class="pt">
+                <mat-radio-group formControlName="guest2Gender">
+                  <mat-radio-button value="male" class="ml mr">Male</mat-radio-button>
+                  <mat-radio-button value="female" class="ml mr">Female</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+          <!-- guest 1 ends -->
+        </div>
+      </form>
+    </mat-step>
+    <!-- guest information ends -->
+    <mat-step label="Payment" stepControlName="payment" [completed]="formGroup.get('payment').valid">
+        <form [formGroup] = "formGroup">
+            <div class="form-container" formGroupName="payment">
+                <h2 class="section-header" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column">
+                    <div>Payment</div>
+                    <div>
+                        <button mat-stroked-button color="accent" matStepperPrevious class="mr">
+                            <mat-icon>chevron_left</mat-icon>&nbsp;<span>Back...</span>
+                        </button>
+                        <button mat-stroked-button color="primary" (click)="onFinishClick()">
+                            <mat-icon>chevron_right</mat-icon><span>Save & Next</span>
+                        </button>
+                    </div>
+                </h2>
+                <mat-tab-group>
+                    <mat-tab label="Credit Card Payment">
+                        <div class="font-weight-bold text-blue mt">Credit Card Details</div>
+                        <div fxLayout="row" fxLayoutGap="35px" fxLayoutAlign="space-between stretch" fxLayoutGap.lt-md="0px">
+                            <mat-form-field fxFlex="1 1 50%" color="primary">
+                                <mat-label>Credit Card Number</mat-label>
+                                <input type="number" matInput formControlName="credtiCardNumber">
+                                <mat-icon matPrefix class="mr">payment</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="1 1 50%" color="primary">
+                                <mat-label>CVV</mat-label>
+                                <input type="number" matInput formControlName="cvv">
+                                <mat-icon matPrefix class="mr">vpn_key</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                    </mat-tab>
+                    <mat-tab label="Gift Card Payment">
+                        <div class="font-weight-bold text-blue mt">Gift Card Details </div>
+                        <mat-form-field color="primary" class="w-100">
+                            <mat-label>Gift Card Number</mat-label>
+                            <input type="number" matInput formControlName="giftCardNumber">
+                            <mat-icon matPrefix class="mr">payment</mat-icon>
+                        </mat-form-field>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step label="Finish">
+        <p>Congratulations, your booking is confirmed</p>
+        <div>
+            <a [routerLink]="['/booking-list']" mat-flat-button class="button-green">Go to Booking List</a>
+        </div>
+    </mat-step>
 </mat-horizontal-stepper>
 <div class="mb">{{formGroup.value | json }}
 </div>
