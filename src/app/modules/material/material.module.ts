@@ -28,7 +28,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import { MatTableModule} from '@angular/material/table'
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort'; 
-
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar'; 
 
 
 
@@ -57,9 +58,11 @@ const materialModules = [ MatButtonModule,
   MatSlideToggleModule,
   MatRadioModule,
   MatTabsModule,
+  MatSnackBarModule,
   MatProgressSpinnerModule,
   MatTableModule,
   MatPaginatorModule, 
+  MatDialogModule,
   MatSortModule
 ]
 

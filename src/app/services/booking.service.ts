@@ -29,13 +29,13 @@ export class BookingService {
 
                 return bookings; 
               }))
-
-
-
-
   }
   postBooking(booking) : Observable<Booking>{
     return this.httpClient.post<Booking>(`http://localhost:3000/bookings`, booking); 
+  }
+
+  putBooking(booking: Booking): Observable<Booking>{
+    return this.httpClient.put<Booking>(`http://localhost:3000/bookings/${booking.id}`, booking)
   }
 
 }

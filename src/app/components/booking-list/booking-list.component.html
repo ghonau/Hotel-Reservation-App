@@ -30,16 +30,21 @@ fxLayout-lt-md="column">
             <td mat-cell *matCellDef="let booking">
                 <mat-checkbox (change)="selection.toggle(booking)" [checked]="selection.isSelected(booking)"></mat-checkbox>
             </td>
+             
+             <td mat-footer-cell *matFooterCellDef colspan="1">
+                <mat-icon matRipple class="hand-icon">menu</mat-icon>
+            </td>  
         </ng-container>
 
-        <ng-container matColumnDef="customerName">
-           <th mat-header-cell  mat-sort-header *matHeaderCellDef>Customer Name</th>
+        <ng-container matColumnDef="customerName" >
+           <th mat-header-cell class="w-10"  mat-sort-header *matHeaderCellDef>Customer Name</th>
             <td mat-cell *matCellDef ="let booking" class="w-15">{{booking.customerName}}</td>
-            <td mat-footer-cell *matFooterCellDef colspan= "2" >Total Bookings</td>
+            <td mat-footer-cell *matFooterCellDef colspan= "3" >Total Bookings</td>
+          
         </ng-container>
 
-        <ng-container matColumnDef="checkIn">
-            <th mat-header-cell  *matHeaderCellDef>
+        <ng-container matColumnDef="checkIn" >
+            <th mat-header-cell  *matHeaderCellDef class="w-50">
                 <div fxLayout="row" fxLayout="start center">
                     <div>
                         Check In   
@@ -48,7 +53,7 @@ fxLayout-lt-md="column">
                     <div>Check Out</div>
                 </div>                
             </th>
-            <td mat-cell *matCellDef ="let booking" class="w-30">
+            <td mat-cell *matCellDef ="let booking" >
                 <div fxLayout="row" fxLayoutAlign="start center">
                     <div>
                         {{booking.checkIn | date : 'yyyy/MM/dd h:mm:ss a'}}
@@ -57,14 +62,16 @@ fxLayout-lt-md="column">
                     <div>
                         {{booking.checkOut | date : 'yyyy//MM/dd h:mm:ss a'}}
                     </div>             
+                    <button mat-stroked-button color="primary" class="ml" (click)="onChangeDatesClick(booking);">Change</button>
                 </div>
             </td>
+            
         </ng-container>
 
         <ng-container matColumnDef="status">
             <th mat-header-cell  *matHeaderCellDef>Payment Status</th>
             <td mat-cell *matCellDef ="let booking" class="w-10">{{booking.status}}</td>
-            <td mat-footer-cell *matFooterCellDef colspan="4">{{rows.length}} Bookings</td>
+            <td mat-footer-cell *matFooterCellDef colspan="5">{{rows.length}} Bookings</td> 
         </ng-container>
 
         <ng-container matColumnDef="roomType">
@@ -99,7 +106,7 @@ fxLayout-lt-md="column">
         <!-- footer row for loading -->
         <tr mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hidden':isLoadingCompleted}"></tr>
         <!-- grand footer row starts -->
-        <tr mat-footer-row *matFooterRowDef ="['customerName','status']; sticky:true" class="text-italic font-weight-bold" [ngClass]="{'hidden':!isLoadingCompleted}"></tr>
+        <tr mat-footer-row *matFooterRowDef ="['select', 'customerName','status']; sticky:true" class="text-italic font-weight-bold" [ngClass]="{'hidden':!isLoadingCompleted}"></tr>
         <!-- grand footer row ends -->
         
 

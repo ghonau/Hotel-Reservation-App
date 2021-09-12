@@ -486,3 +486,9 @@ td.mat-footer-cell:first-of-type {
 @media screen and (min-width: 1001px) {
   /* styles for large devices */
 }
+
+.dialog-box{
+  border: 2px solid #065eb1;
+  border-top: 5px solid #065eb1; 
+  border-radius: 6px;
+}

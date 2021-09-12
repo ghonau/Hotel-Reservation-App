@@ -16,13 +16,15 @@ import { BookingListComponent } from './components/booking-list/booking-list.com
 import { charts } from 'highcharts';
 import { MatNativeDateModule } from '@angular/material/core';
 import { RoomType } from './models/roomType';
+import { ChangeDatesComponent } from './components/change-dates/change-dates.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     BookingComponent,
-    BookingListComponent,    
+    BookingListComponent,
+    ChangeDatesComponent,    
   ],
   imports: [
     BrowserModule,

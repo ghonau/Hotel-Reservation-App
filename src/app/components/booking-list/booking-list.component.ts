@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Booking } from 'src/app/models/booking';
 import { BookingService } from 'src/app/services/booking.service';
-import {MatTableDataSource} from '@angular/material/table'
+import {MatTable, MatTableDataSource} from '@angular/material/table'
 import { FormControl, FormGroup } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort';
 import {SelectionModel } from "@angular/cdk/collections"; 
+import { DialogService } from 'src/app/services/dialog.service';
+import { ChangeDatesComponent } from '../change-dates/change-dates.component';
+import { MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -29,7 +32,7 @@ export class BookingListComponent implements OnInit {
   @ViewChild(MatSort) sort : MatSort; 
   selection: SelectionModel<Booking> = new SelectionModel<Booking>(true, []); 
 
-  constructor(private bookingService : BookingService) { 
+  constructor(private bookingService : BookingService, private dialogService : DialogService) { 
 
     this.formGroup = new FormGroup ({
       search : new FormControl(null)
@@ -58,19 +61,10 @@ export class BookingListComponent implements OnInit {
     this.isLoadingCompleted = false ;
     this.bookingService.getBookings().subscribe(
       (response ) => {
-        this.bookings = new MatTableDataSource<Booking>(response); 
         this.rows = response; 
-        this.isLoadingCompleted = true ;
-        this.isError = false;
-        this.bookings.paginator = this.paginator; 
-        this.bookings.sort = this.sort; 
-        this.bookings.filterPredicate = (data, filter) => {
+        this.createTableDataSource(this.rows); 
 
-          return this.columnsToDisplay.some((column,i) => {
-            return column != 'actions' && column !="select" && data[column] && data[column].toString().toLowerCase().indexOf(filter)!=-1; 
-          })
-        }
-
+       
       },
       (error) => {
         console.log(error);
@@ -79,6 +73,20 @@ export class BookingListComponent implements OnInit {
         this.isLoadingCompleted = true; 
       }
     )  
+  }
+  createTableDataSource(bookings: Booking[]){
+    this.bookings = new MatTableDataSource<Booking>(bookings); 
+    this.isLoadingCompleted = true ;
+    this.isError = false;
+    this.bookings.paginator = this.paginator; 
+    this.bookings.sort = this.sort; 
+    this.bookings.filterPredicate = (data, filter) => {
+
+      return this.columnsToDisplay.some((column,i) => {
+        return column != 'actions' && column !="select" && data[column] && data[column].toString().toLowerCase().indexOf(filter)!=-1; 
+      })
+    }
+
   }
   isAllSelected(){
     if(this.bookings){
@@ -99,4 +107,26 @@ export class BookingListComponent implements OnInit {
       }
     }
   }
+  onChangeDatesClick(booking: Booking){
+    let dialogRef : MatDialogRef<ChangeDatesComponent>  = this.dialogService.openDateChangerDialog(booking); 
+    dialogRef.afterClosed().subscribe((dialogResult)=>{
+      if(dialogResult && dialogResult.data){
+        
+        this.rows = this.rows.map((booking) => {
+          if(booking.id == dialogResult.data.id) {
+            console.log(booking.checkOut);            
+            booking = {...booking, checkIn: dialogResult.data.checkIn, checkOut:dialogResult.data.checkOut};            
+            console.log(booking.checkOut);
+          }
+          return booking; 
+        })
+
+        this.createTableDataSource(this.rows); 
+
+      }
+    })
+
+  }
+
+ 
 }

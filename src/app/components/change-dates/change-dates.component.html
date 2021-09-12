@@ -1,0 +1,38 @@
+<form [formGroup] = "formGroup">
+    <div class="form-container">
+        <h2 class="section-header" mat-dialog-title>Change Dates <mat-icon tabIndex="-1" class="float-right hand-icon" (click)="onCancelClick()" mat-dialog-close MatRipple>close</mat-icon></h2>
+        <mat-dialog-content>
+            <!-- check in starts -->
+            <mat-form-field class="w-100" color="primary">
+                <mat-label>Check-In</mat-label>
+                <input type="text" autocomplete="off" matInput 
+                 formControlName="checkIn"
+                 (change)="onCheckInDateChange()"
+                 [matDatepicker]="checkInDatepicker">                
+                <mat-datepicker #checkInDatepicker ></mat-datepicker>
+                <mat-datepicker-toggle [for]="checkInDatepicker" matSuffix>
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-hint align='end'>Choose check-in date</mat-hint>
+                <mat-icon matPrefix class="mr">calendar_today</mat-icon>
+            </mat-form-field>
+
+            <!-- check out starts -->
+            <mat-form-field class="w-100" color="primary">
+                <mat-label>Check-Out</mat-label>
+                <input type="text" autocomplete="off" matInput formControlName="checkOut" [matDatepicker]="checkOutDatepicker">                
+                <mat-datepicker #checkOutDatepicker ></mat-datepicker>
+                <mat-datepicker-toggle [for]="checkOutDatepicker" matSuffix>
+                    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-hint align='end'>Choose check-out date</mat-hint>
+                <mat-icon matPrefix class="mr">calendar_today</mat-icon>
+            </mat-form-field>
+        </mat-dialog-content>
+        <mat-progress-bar mode="indeterminate" *ngIf="isWorking"></mat-progress-bar>
+        <mat-dialog-actions  fxLayout="row" fxLayoutAlign='end center'>
+            <button mat-flat-button  (click)="onCancelClick()" color="warn">Cancel</button>
+                <button mat-flat-button (click)="onSaveClick()" color="primary">Save</button>
+        </mat-dialog-actions>
+    </div>
+</form>
