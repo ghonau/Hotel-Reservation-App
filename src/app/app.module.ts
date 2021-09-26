@@ -17,6 +17,7 @@ import { charts } from 'highcharts';
 import { MatNativeDateModule } from '@angular/material/core';
 import { RoomType } from './models/roomType';
 import { ChangeDatesComponent } from './components/change-dates/change-dates.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ChangeDatesComponent } from './components/change-dates/change-dates.com
     DashboardComponent,
     BookingComponent,
     BookingListComponent,
-    ChangeDatesComponent,    
+    ChangeDatesComponent,
+    NotificationsComponent,    
   ],
   imports: [
     BrowserModule,

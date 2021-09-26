@@ -1,0 +1,14 @@
+
+<div class="notification-header text-black">
+<span [ngClass]="textCssClass">{{data.messageType | titlecase}}</span>
+<mat-icon class="float-right hand-icon text-black"  matRipple (click)="matSnackbarRef.dismiss()">close</mat-icon>
+</div>
+<div class="notification-icon">
+    <mat-icon class="text-largest" [ngClass]="textCssClass">
+       {{data.messageType  == "success" ? "check_circle" : 'error'}}
+    </mat-icon>
+</div>
+<div class="notification-message" [ngClass]="textCssClass">{{data.message}}</div>
+<div class="text-right mb p mr ml">
+    <button mat-stroked-button color="primary" (click)="matSnackbarRef.dismiss()">{{data.buttonText}}</button>
+</div>
